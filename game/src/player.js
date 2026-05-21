@@ -500,8 +500,8 @@ class Player {
     }
 
     draw(ctx, cameraX, cameraY) {
-        const screenX = this.x - cameraX - 32; // 中心合わせ
-        const screenY = this.y - cameraY - 48;
+        const screenX = this.x - cameraX - 16; // 中心合わせ（0.5倍スケーリング後）
+        const screenY = this.y - cameraY - 24;
         drawPlayer(ctx, screenX, screenY, this.direction, this.animFrame);
     }
 }

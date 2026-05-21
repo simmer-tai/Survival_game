@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Live Server (Hot Reload)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["live-server", "--port=5500"],
+      "port": 5500
+    },
+    {
+      "name": "Python HTTP Server",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "Node.js http-server",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "-p", "8080"],
+      "port": 8080
+    }
+  ]
+}
