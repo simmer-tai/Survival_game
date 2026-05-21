@@ -461,17 +461,21 @@ class Player {
         const newY = this.y + inputY * this.speed;
 
         // 衝突判定を含めて移動
-        if (tilemap.canMove(newX, this.y, this.width, this.height)) {
+        // this.x, this.yは中心座標なので、左上座標に変換して判定
+        const halfWidth = this.width / 2;
+        const halfHeight = this.height / 2;
+
+        if (tilemap.canMove(newX - halfWidth, this.y - halfHeight, this.width, this.height)) {
             this.x = newX;
         }
 
-        if (tilemap.canMove(this.x, newY, this.width, this.height)) {
+        if (tilemap.canMove(this.x - halfWidth, newY - halfHeight, this.width, this.height)) {
             this.y = newY;
         }
 
         // マップ境界チェック
-        this.x = Math.max(0, Math.min(this.x, tilemap.width * 32 - this.width));
-        this.y = Math.max(0, Math.min(this.y, tilemap.height * 32 - this.height));
+        this.x = Math.max(halfWidth, Math.min(this.x, tilemap.width * 32 - halfWidth));
+        this.y = Math.max(halfHeight, Math.min(this.y, tilemap.height * 32 - halfHeight));
 
         // 方向更新
         if (inputX !== 0 || inputY !== 0) {
