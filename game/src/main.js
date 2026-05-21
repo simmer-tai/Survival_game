@@ -28,6 +28,7 @@ function gameLoop(currentTime) {
     const cameraY = camera.getOffsetY();
 
     tilemap.draw(ctx, cameraX, cameraY, canvas.width, canvas.height);
+    oreManager.draw(ctx, cameraX, cameraY);
     player.draw(ctx, cameraX, cameraY);
 
     // UI描画

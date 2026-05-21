@@ -76,4 +76,6 @@ class TileMap {
     }
 }
 
-const tilemap = new TileMap(mapGenerator.generate());
+const mapData = mapGenerator.generate();
+const tilemap = new TileMap(mapData);
+const oreManager = new OreManager(mapData);
