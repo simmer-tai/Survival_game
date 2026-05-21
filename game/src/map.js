@@ -78,7 +78,7 @@ class TileMap {
 
                 // 各コーナーの丸め半径
                 // 隣接タイルがある辺に接するコーナーは r=0
-                const BASE_R = 6;
+                const BASE_R = 16;
                 const rTL = (!adjL && !adjU) ? BASE_R : 0;
                 const rTR = (!adjR && !adjU) ? BASE_R : 0;
                 const rBR = (!adjR && !adjD) ? BASE_R : 0;
