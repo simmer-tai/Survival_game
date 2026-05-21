@@ -60,17 +60,59 @@ class TileMap {
             for (let x = startTileX; x < endTileX; x++) {
                 const tileId = this.tiles[y][x];
                 const tileType = this.tileTypes[tileId];
+                const sx = x * this.tileSize - cameraX;
+                const sy = y * this.tileSize - cameraY;
+                const s = this.tileSize;
 
-                const screenX = x * this.tileSize - cameraX;
-                const screenY = y * this.tileSize - cameraY;
+                // 同種タイルの隣接チェック
+                const sameType = (dx, dy) => {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx < 0 || nx >= this.width || ny < 0 || ny >= this.height) return true;
+                    return this.tiles[ny][nx] === tileId;
+                };
 
-                ctx.fillStyle = tileType.color;
-                ctx.fillRect(screenX, screenY, this.tileSize, this.tileSize);
+                const adjL  = sameType(-1,  0);
+                const adjR  = sameType( 1,  0);
+                const adjU  = sameType( 0, -1);
+                const adjD  = sameType( 0,  1);
+
+                // 各コーナーの丸め半径
+                // 隣接タイルがある辺に接するコーナーは r=0
+                const BASE_R = 6;
+                const rTL = (!adjL && !adjU) ? BASE_R : 0;
+                const rTR = (!adjR && !adjU) ? BASE_R : 0;
+                const rBR = (!adjR && !adjD) ? BASE_R : 0;
+                const rBL = (!adjL && !adjD) ? BASE_R : 0;
+
+                // すべて0なら普通の矩形
+                if (rTL === 0 && rTR === 0 && rBR === 0 && rBL === 0) {
+                    ctx.fillStyle = tileType.color;
+                    ctx.fillRect(sx, sy, s, s);
+                } else {
+                    ctx.beginPath();
+                    // 左上
+                    ctx.moveTo(sx + rTL, sy);
+                    // 右上
+                    ctx.lineTo(sx + s - rTR, sy);
+                    if (rTR > 0) ctx.arcTo(sx+s, sy,   sx+s, sy+rTR,   rTR);
+                    // 右下
+                    ctx.lineTo(sx + s, sy + s - rBR);
+                    if (rBR > 0) ctx.arcTo(sx+s, sy+s, sx+s-rBR, sy+s, rBR);
+                    // 左下
+                    ctx.lineTo(sx + rBL, sy + s);
+                    if (rBL > 0) ctx.arcTo(sx,   sy+s, sx, sy+s-rBL,   rBL);
+                    // 左上に戻る
+                    ctx.lineTo(sx, sy + rTL);
+                    if (rTL > 0) ctx.arcTo(sx,   sy,   sx+rTL, sy,     rTL);
+                    ctx.closePath();
+                    ctx.fillStyle = tileType.color;
+                    ctx.fill();
+                }
 
                 // グリッド線（デバッグ用）
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
                 ctx.lineWidth = 0.5;
-                ctx.strokeRect(screenX, screenY, this.tileSize, this.tileSize);
+                ctx.strokeRect(sx, sy, s, s);
             }
         }
     }
